@@ -1,0 +1,6 @@
+# Build Options
+OLED_ENABLE = yes
+OLED_DRIVER = SSD1306
+WPM_ENABLE = yes
+VIA_ENABLE = no
+BACKLIGHT_ENABLE = no
