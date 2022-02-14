@@ -288,17 +288,17 @@ static void print_status_narrow(void) {
 
 void oled_task_user(void) {
     render_anim();
-    oled_set_cursor(0, 14);
     print_status_narrow();
-    uint8_t n = get_current_wpm();
-    char    wpm_counter[6];
-    wpm_counter[5] = '\0';
-    wpm_counter[4] = '0' + n % 10;
-    wpm_counter[3] = '0' + (n /= 10) % 10;
-    wpm_counter[2] = '0' + n / 10;
-    wpm_counter[1] = '0';
-    wpm_counter[0] = '>';
-    oled_write_ln(wpm_counter, false);
+
+    // uint8_t n = get_current_wpm();
+    // char    wpm_counter[6];
+    // wpm_counter[5] = '\0';
+    // wpm_counter[4] = '0' + n % 10;
+    // wpm_counter[3] = '0' + (n /= 10) % 10;
+    // wpm_counter[2] = '0' + n / 10;
+    // wpm_counter[1] = '0';
+    // wpm_counter[0] = '>';
+    // oled_write_ln(wpm_counter, false);
 }
 
 #endif
@@ -313,20 +313,20 @@ void toggleArt(void){
 
 // Animate tap
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-#ifdef OLED_ENABLE
-    // Check if non-mod
-    if ((keycode >= KC_A && keycode <= KC_0) || (keycode >= KC_TAB && keycode <= KC_SLASH)) {
-        if (record->event.pressed) {
-            // Display tap frames
-            tap_anim_toggle = !tap_anim_toggle;
-#    ifdef USE_OLED_BITMAP_COMPRESSION
-            oled_write_compressed_P(tap_block_map[tap_anim_toggle], tap_frames[tap_anim_toggle]);
-#    else
-            oled_write_raw_P(tap_frames[tap_anim_toggle], NUM_OLED_BYTES);
-#    endif
-        }
-    }
-#endif
+// #ifdef OLED_ENABLE
+//     // Check if non-mod
+//     if ((keycode >= KC_A && keycode <= KC_0) || (keycode >= KC_TAB && keycode <= KC_SLASH)) {
+//         if (record->event.pressed) {
+//             // Display tap frames
+//             tap_anim_toggle = !tap_anim_toggle;
+// #    ifdef USE_OLED_BITMAP_COMPRESSION
+//             oled_write_compressed_P(tap_block_map[tap_anim_toggle], tap_frames[tap_anim_toggle]);
+// #    else
+//             oled_write_raw_P(tap_frames[tap_anim_toggle], NUM_OLED_BYTES);
+// #    endif
+//         }
+//     }
+// #endif
 
     switch (keycode) {
         case PROG:
