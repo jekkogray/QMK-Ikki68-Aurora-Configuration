@@ -74,7 +74,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [_FN1] = LAYOUT_iso(
                 _______,   KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_F7,   KC_F8,   KC_F9,  KC_F10,  KC_F11,  KC_F12, KC_DEL,  KC_INS,
         _______, KC_CAPS, _______, KC_UP, _______, _______, _______, _______, _______, KC_UP, _______, _______, _______, _______,          _______,
-        _______, KC_NO, KC_LEFT, KC_DOWN, KC_RGHT, _______, _______, _______, KC_LEFT, KC_DOWN, KC_RGHT, _______, _______, _______, _______, KC_HOME,
+        RGB_TOG, KC_NO, KC_LEFT, KC_DOWN, KC_RGHT, _______, _______, _______, KC_LEFT, KC_DOWN, KC_RGHT, _______, _______, _______, _______, KC_HOME,
         _______, _______, KC_DEL, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
         _______, _______, _______, _______,                            _______,                   _______, _______, _______, KC_MPRV, KC_MPLY, KC_MNXT
     ),
@@ -94,7 +94,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     // ---'----'----'----'----------'---'---------'---'---'---'---'---'---'
 
     [_FN2] = LAYOUT_iso(
-        _______,  CG_TOGG, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
+        _______,  AG_TOGG, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
         _______,  _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
         _______,  _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
         _______,  _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
@@ -229,7 +229,7 @@ static void render_anim(void) {
 static void print_status_narrow(void) {
     /* Print current mode */
     oled_set_cursor(0, 0);
-    if (keymap_config.swap_lctl_lgui) {
+    if (keymap_config.swap_lalt_lgui) {
         oled_write_raw_P(mac_logo, sizeof(mac_logo));
     } else {
         oled_write_raw_P(windows_logo, sizeof(windows_logo));
@@ -288,8 +288,8 @@ static void print_status_narrow(void) {
 
 void oled_task_user(void) {
     render_anim();
+
     oled_set_cursor(0, 14);
-    print_status_narrow();
     uint8_t n = get_current_wpm();
     char    wpm_counter[6];
     wpm_counter[5] = '\0';
@@ -299,6 +299,7 @@ void oled_task_user(void) {
     wpm_counter[1] = '0';
     wpm_counter[0] = '>';
     oled_write_ln(wpm_counter, false);
+    print_status_narrow();
 }
 
 #endif
@@ -328,16 +329,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     }
 #endif
 
-    switch (keycode) {
-        case PROG:
-            if (record->event.pressed) {
-                rgblight_disable_noeeprom();
-#ifdef OLED_ENABLE
-                oled_off();
-#endif
-                bootloader_jump();
-            }
-            break;
+    switch (keycode){
         case ENCDR_TOG:
             if (record->event.pressed) {
                 toggleEncoder();
@@ -348,6 +340,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             if (record->event.pressed) {
                 toggleArt();
             }
+            break;
         default:
             break;
     }
